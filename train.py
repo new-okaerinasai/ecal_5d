@@ -21,7 +21,7 @@ import os
 import numpy as np
 import torch
 from torch.optim import Adam
-import nirvana_dl
+
 
 parser = argparse.ArgumentParser(conflict_handler='resolve')
 parser.add = parser.add_argument
@@ -316,7 +316,7 @@ for epoch in range(epoch_start + 1, opt.num_epoch + 1):
             torch.save(
                 opt_D.state_dict(),
                 os.path.join(model.weights_path, '%d_opt_D.pkl' % epoch))
-        nirvana_dl.snapshot.dump_snapshot()
+        
 
 logs.close()
 utils.save_checkpoint(model, 'latest')

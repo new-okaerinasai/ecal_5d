@@ -10,9 +10,7 @@ from torchvision.models import resnet18, vgg19
 import os
 import torch.nn.functional as F
 import numpy as np
-import nirvana_dl
-input_path = nirvana_dl.input_data_path()
-#input_path = "./"
+input_path = "./"
 
 class Model(nn.Module):
 
