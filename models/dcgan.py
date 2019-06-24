@@ -10,7 +10,8 @@ from torchvision.models import resnet18, vgg19
 import os
 import torch.nn.functional as F
 import numpy as np
-input_path = "./"
+#import nirvana_dl
+input_path = "./"#nirvana_dl.get_input_path()
 
 class Model(nn.Module):
 
@@ -159,6 +160,7 @@ class Model(nn.Module):
         self.fake_B_denormalized = self.denormalize_data(self.fake_B)
 
     def get_assymetry(self, data, ps, points, orthog=False):
+        # асимметрия ливня вдоль и поперек направнения наклона
         first = True
         assym_res = []
         for i in range(len(data)):
@@ -198,7 +200,7 @@ class Model(nn.Module):
         assym1, _ = torch.sort(assym1)
         assym2, _ = torch.sort(assym1)
 
-        return F.smooth_l1_loss(assym1, assym2)
+        return F.mse_loss(assym1, assym2)
         
     def backward_G(self):
 
@@ -216,7 +218,6 @@ class Model(nn.Module):
             fake_B_aux = self.aux(self.fake_B)
             self.loss_auxil_B = self.crit_aux_B(fake_B_aux, self.real_B_aux)
             loss_G += self.loss_auxil_B
-            """ 
             loss_G += self.loss_quantile(self.fake_B_denormalized,
                                          self.real_B_denormalized,
                                          self.denormalize_target(fake_B_aux), 
@@ -228,7 +229,6 @@ class Model(nn.Module):
                                          self.denormalize_target(fake_B_aux),
                                          self.real_B_aux_denormalized,
                                          True)
-             """                           
         if self.training and loss_G:
             loss_G.backward()
         # Get values for visualization
